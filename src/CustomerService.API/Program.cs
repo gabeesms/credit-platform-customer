@@ -1,4 +1,5 @@
 using CustomerService.Application.Interfaces;
+using CustomerService.Application.UseCases.Customers.CreateCustomer;
 using CustomerService.Infrastructure.Persistence;
 using CustomerService.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,17 @@ builder.Services.AddDbContext<CustomerDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<CreateCustomerHandler>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
