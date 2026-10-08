@@ -16,16 +16,33 @@ public sealed class Cpf
 
     public static Cpf Create(string value)
     {
-        var digits = new string(value.Where(char.IsDigit).ToArray());
+        if (string.IsNullOrWhiteSpace(value))
+            throw new ArgumentException("CPF é obrigatório.", nameof(value));
+
+        var digitsBuilder = new System.Text.StringBuilder(value.Length);
+
+        foreach (var character in value)
+        {
+            if (character is >= '0' and <= '9')
+            {
+                digitsBuilder.Append(character);
+                continue;
+            }
+
+            if (character is not '.' and not '-')
+                throw new ArgumentException("CPF contém caracteres inválidos.", nameof(value));
+        }
+
+        var digits = digitsBuilder.ToString();
 
         if (digits.Length != 11)
-            throw new ArgumentException("CPF deve conter 11 dígitos.");
+            throw new ArgumentException("CPF deve conter 11 dígitos.", nameof(value));
 
         if (digits.Distinct().Count() == 1)
-            throw new ArgumentException("CPF inválido.");
+            throw new ArgumentException("CPF inválido.", nameof(value));
 
         if (!IsValid(digits))
-            throw new ArgumentException("CPF inválido.");
+            throw new ArgumentException("CPF inválido.", nameof(value));
 
         return new Cpf(digits);
     }

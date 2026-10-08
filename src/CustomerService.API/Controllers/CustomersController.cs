@@ -3,6 +3,7 @@ using CustomerService.Application.UseCases.Customers.CreateCustomer;
 using CustomerService.Application.UseCases.Customers.GetCustomerById;
 using Microsoft.AspNetCore.Mvc;
 using CustomerService.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace CustomerService.API.Controllers;
 
@@ -43,19 +44,19 @@ public class CustomersController : ControllerBase
                 new { id = customer.Id },
                 MapToResponse(customer));
         }
+        catch (CustomerCpfAlreadyExistsException ex)
+        {
+            return Problem(
+                statusCode: StatusCodes.Status409Conflict,
+                title: "CPF já cadastrado",
+                detail: ex.Message);
+        }
         catch (ArgumentException ex)
         {
-            return BadRequest(new
-            {
-                message = ex.Message
-            });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new
-            {
-                message = ex.Message
-            });
+            return Problem(
+                statusCode: StatusCodes.Status400BadRequest,
+                title: "Dados inválidos",
+                detail: ex.Message);
         }
     }
 
@@ -71,7 +72,9 @@ public class CustomersController : ControllerBase
             cancellationToken);
 
         if (customer is null)
-            return NotFound();
+            return Problem(
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Cliente não encontrado");
 
         return Ok(MapToResponse(customer));
     }

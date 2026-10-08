@@ -24,7 +24,7 @@ public class CreateCustomerHandler
             cancellationToken);
 
         if (cpfExists)
-            throw new InvalidOperationException("CPF já cadastrado.");
+            throw new CustomerCpfAlreadyExistsException();
 
         var customer = new Customer(
             command.Name,

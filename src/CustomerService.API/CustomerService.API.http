@@ -1,6 +1,18 @@
 @CustomerService.API_HostAddress = http://localhost:5175
 
-GET {{CustomerService.API_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{CustomerService.API_HostAddress}}/api/customers
+Content-Type: application/json
+
+{
+	"name": "Ana Silva",
+	"cpf": "529.982.247-25",
+	"email": "ana@example.com",
+	"birthDate": "1990-01-01T00:00:00Z"
+}
 
 ###
+
+@customerId = 00000000-0000-0000-0000-000000000000
+
+GET {{CustomerService.API_HostAddress}}/api/customers/{{customerId}}
+Accept: application/json

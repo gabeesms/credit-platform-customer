@@ -1,8 +1,10 @@
 ﻿using CustomerService.Application.Interfaces;
+using CustomerService.Application.UseCases.Customers.CreateCustomer;
 using CustomerService.Domain.Entities;
 using CustomerService.Domain.ValueObjects;
 using CustomerService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 
 namespace CustomerService.Infrastructure.Repositories;
 
@@ -20,7 +22,16 @@ public class CustomerRepository : ICustomerRepository
         CancellationToken cancellationToken)
     {
         await _context.Customers.AddAsync(customer, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+
+        try
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception) when (
+            exception.InnerException is SqlException { Number: 2601 or 2627 })
+        {
+            throw new CustomerCpfAlreadyExistsException(exception);
+        }
 
         return customer;
     }

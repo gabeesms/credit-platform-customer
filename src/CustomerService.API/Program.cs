@@ -16,11 +16,14 @@ builder.Services.AddScoped<CreateCustomerHandler>();
 builder.Services.AddScoped<GetCustomerByIdHandler>();
 
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -30,3 +33,5 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program;
