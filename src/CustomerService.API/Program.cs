@@ -1,5 +1,6 @@
 using CustomerService.Application.Interfaces;
 using CustomerService.Application.UseCases.Customers.CreateCustomer;
+using CustomerService.Application.UseCases.Customers.GetCustomerById;
 using CustomerService.Infrastructure.Persistence;
 using CustomerService.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<CustomerDbContext>(options =>
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<CreateCustomerHandler>();
+builder.Services.AddScoped<GetCustomerByIdHandler>();
 
 builder.Services.AddControllers();
 

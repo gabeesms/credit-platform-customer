@@ -23,15 +23,24 @@ public class Customer
     }
 
     public Customer(
-        string name,
-        string cpf,
-        string email,
-        DateTime birthDate)
+    string name,
+    string cpf,
+    string email,
+    DateTime birthDate)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Nome é obrigatório.");
+
+        if (string.IsNullOrWhiteSpace(email))
+            throw new ArgumentException("E-mail é obrigatório.");
+
+        if (birthDate > DateTime.UtcNow)
+            throw new ArgumentException("Data de nascimento inválida.");
+
         Id = Guid.NewGuid();
-        Name = name;
+        Name = name.Trim();
         CPF = Cpf.Create(cpf);
-        Email = email;
+        Email = email.Trim();
         BirthDate = birthDate;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;

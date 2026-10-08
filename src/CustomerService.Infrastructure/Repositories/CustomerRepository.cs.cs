@@ -1,5 +1,6 @@
 ﻿using CustomerService.Application.Interfaces;
 using CustomerService.Domain.Entities;
+using CustomerService.Domain.ValueObjects;
 using CustomerService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,12 +36,12 @@ public class CustomerRepository : ICustomerRepository
     }
 
     public async Task<bool> ExistsByCpfAsync(
-        string cpf,
-        CancellationToken cancellationToken)
+    Cpf cpf,
+    CancellationToken cancellationToken)
     {
         return await _context.Customers
             .AnyAsync(
-                customer => customer.CPF.Value == cpf,
+                customer => customer.CPF == cpf,
                 cancellationToken);
     }
 }

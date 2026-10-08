@@ -41,6 +41,9 @@ public class CustomerDbContext : DbContext
                     value => CustomerService.Domain.ValueObjects.Cpf.Create(value))
                 .HasMaxLength(11)
                 .IsRequired();
+
+            entity.HasIndex(c => c.CPF)
+                .IsUnique();
         });
     }
 }

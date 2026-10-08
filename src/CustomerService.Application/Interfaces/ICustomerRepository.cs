@@ -1,4 +1,5 @@
 ﻿using CustomerService.Domain.Entities;
+using CustomerService.Domain.ValueObjects;
 
 namespace CustomerService.Application.Interfaces;
 
@@ -8,5 +9,5 @@ public interface ICustomerRepository
 
     Task<Customer?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    Task<bool> ExistsByCpfAsync(string cpf, CancellationToken cancellationToken);
+    Task<bool> ExistsByCpfAsync(Cpf cpf, CancellationToken cancellationToken);
 }
